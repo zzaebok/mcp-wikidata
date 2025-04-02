@@ -123,3 +123,9 @@ The following tools are implemented in the server:
 | `get_properties(entity_id: str)`                     | Get the properties associated with a given Wikidata entity ID.             |
 | `execute_sparql(sparql_query: str)`                  | Execute a SPARQL query on Wikidata.                                        |
 | `get_metadata(entity_id: str, language: str = "en")` | Retrieve the English label and description for a given Wikidata entity ID. |
+
+---
+
+#### License
+
+MIT License
