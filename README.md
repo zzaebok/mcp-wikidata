@@ -1,5 +1,7 @@
 ## Wikidata MCP Server
 
+[![smithery badge](https://smithery.ai/badge/@zzaebok/mcp-wikidata)](https://smithery.ai/server/@zzaebok/mcp-wikidata)
+
 A server implementation for Wikidata API using the Model Context Protocol (MCP).
 This project provides tools to interact with Wikidata, such as **searching identifiers** (entity and property), **extracting metadata** (label and description) and **executing sparql query**.
 
@@ -7,6 +9,15 @@ This project provides tools to interact with Wikidata, such as **searching ident
 
 ### Installation
 
+#### Installing via Smithery
+
+To install Wikidata MCP Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@zzaebok/mcp-wikidata):
+
+```bash
+npx -y @smithery/cli install @zzaebok/mcp-wikidata --client claude
+```
+
+#### Installing Manually
 Install `uv` if it is not installed yet.
 
 ```bash
