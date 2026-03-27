@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/zzaebok-mcp-wikidata-badge.png)](https://mseep.ai/app/zzaebok-mcp-wikidata)
+
 ## Wikidata MCP Server
 
 [![smithery badge](https://smithery.ai/badge/@zzaebok/mcp-wikidata)](https://smithery.ai/server/@zzaebok/mcp-wikidata)
