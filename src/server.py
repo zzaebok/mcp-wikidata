@@ -10,7 +10,7 @@ WIKIDATA_URL = "https://www.wikidata.org/w/api.php"
 HEADER = {"Accept": "application/json", "User-Agent": "foobar"}
 
 
-async def search_wikidata(query: str, is_entity: bool = True) -> str:
+async def search_wikidata(query: str, is_entity: bool = True, limit: int=1) -> str:
     """
     Search for a Wikidata item or property ID by its query.
     """
@@ -19,7 +19,7 @@ async def search_wikidata(query: str, is_entity: bool = True) -> str:
         "list": "search",
         "srsearch": query,
         "srnamespace": 0 if is_entity else 120,
-        "srlimit": 1,  # TODO: add a parameter to limit the number of results?
+        "srlimit": limit, 
         "srqiprofile": "classic_noboostlinks" if is_entity else "classic",
         "srwhat": "text",
         "format": "json",
@@ -28,15 +28,17 @@ async def search_wikidata(query: str, is_entity: bool = True) -> str:
         response = await client.get(WIKIDATA_URL, headers=HEADER, params=params)
     response.raise_for_status()
     try:
-        title = response.json()["query"]["search"][0]["title"]
-        title = title.split(":")[-1]
-        return title
+        search_results = response.json()["query"]["search"]
+        if not search_results:
+            return "No results found. Consider changing the search term."
+        titles = [result["title"].split(":")[-1] for result in search_results]  # Collect all titles
+        return titles
     except KeyError:
         return "No results found. Consider changing the search term."
 
 
 @server.tool()
-async def search_entity(query: str) -> str:
+async def search_entity(query: str, limit: int=1) -> str:
     """
     Search for a Wikidata entity ID by its query.
 
@@ -46,11 +48,10 @@ async def search_entity(query: str) -> str:
     Returns:
         str: The Wikidata entity ID corresponding to the given query."
     """
-    return await search_wikidata(query, is_entity=True)
-
+    return await search_wikidata(query, is_entity=True, limit=limit)
 
 @server.tool()
-async def search_property(query: str) -> str:
+async def search_property(query: str, limit:int=1) -> str:
     """
     Search for a Wikidata property ID by its query.
 
@@ -60,7 +61,7 @@ async def search_property(query: str) -> str:
     Returns:
         str: The Wikidata property ID corresponding to the given query."
     """
-    return await search_wikidata(query, is_entity=False)
+    return await search_wikidata(query, is_entity=False, limit=limit)
 
 
 @server.tool()
@@ -150,4 +151,7 @@ async def get_metadata(entity_id: str, language: str = "en") -> Dict[str, str]:
 
 
 if __name__ == "__main__":
+    print("Starting server on port 5001...")
     server.run()
+
+
