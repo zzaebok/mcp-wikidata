@@ -7,7 +7,12 @@ from typing import List, Dict
 server = FastMCP("Wikidata MCP Server")
 
 WIKIDATA_URL = "https://www.wikidata.org/w/api.php"
-HEADER = {"Accept": "application/json", "User-Agent": "foobar"}
+HEADER = {
+    "Accept": "application/json",
+    # Wikidata (esp. the SPARQL endpoint) requires a descriptive User-Agent
+    # per its User-Agent policy; the default httpx UA is blocked with 403.
+    "User-Agent": "mcp-wikidata/0.1 (https://github.com/zzaebok/mcp-wikidata)",
+}
 
 
 async def search_wikidata(query: str, is_entity: bool = True, limit: int=1) -> str:
@@ -108,7 +113,7 @@ async def execute_sparql(sparql_query: str) -> str:
     url = "https://query.wikidata.org/sparql"
     async with httpx.AsyncClient() as client:
         response = await client.get(
-            url, params={"query": sparql_query, "format": "json"}
+            url, params={"query": sparql_query, "format": "json"}, headers=HEADER
         )
     response.raise_for_status()
     result = response.json()["results"]["bindings"]
